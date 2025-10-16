@@ -1,4 +1,4 @@
-# SGP - Sistema de Gestão de Cotações
+# SGC - Sistema de Gestão de Cotações
 
 Um sistema web completo e moderno para gerenciamento de propostas comerciais, cadastro de produtos e fornecedores, com sistema inteligente de alertas e renovação automática.
 
