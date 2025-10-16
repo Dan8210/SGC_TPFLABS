@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão de Propostas e Fornecedores</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 font-inter">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <i class="fas fa-clipboard-list text-blue-600 text-2xl mr-3"></i>
+                    <h1 class="text-xl font-bold text-gray-900">SGP - Sistema de Gestão de Propostas</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="alertasBtn" class="relative p-2 text-gray-400 hover:text-gray-500">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span id="alertasBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                        </button>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        <span id="dataAtual"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-8">
+                <button class="tab-button active py-4 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600" data-tab="dashboard">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                </button>
+                <button class="tab-button py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="produtos">
+                    <i class="fas fa-box mr-2"></i>Produtos
+                </button>
+                <button class="tab-button py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="fornecedores">
+                    <i class="fas fa-truck mr-2"></i>Fornecedores
+                </button>
+                <button class="tab-button py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="propostas">
+                    <i class="fas fa-file-contract mr-2"></i>Propostas
+                </button>
+                <button class="tab-button py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="cotacoes">
+                    <i class="fas fa-clock mr-2"></i>Cotações Pendentes
+                </button>
+                <button class="tab-button py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="relatorios">
+                    <i class="fas fa-chart-bar mr-2"></i>Relatórios
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content">
+            <div class="px-4 py-6 sm:px-0">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Dashboard</h2>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="p-5">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-box text-blue-600 text-2xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">Produtos Cadastrados</dt>
+                                        <dd class="text-lg font-medium text-gray-900" id="totalProdutos">0</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="p-5">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-truck text-green-600 text-2xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">Fornecedores Ativos</dt>
+                                        <dd class="text-lg font-medium text-gray-900" id="totalFornecedores">0</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="p-5">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-file-contract text-yellow-600 text-2xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">Propostas Ativas</dt>
+                                        <dd class="text-lg font-medium text-gray-900" id="totalPropostas">0</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="p-5">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">Alertas Pendentes</dt>
+                                        <dd class="text-lg font-medium text-gray-900" id="totalAlertas">0</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white shadow rounded-lg mb-8">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Atividades Recentes</h3>
+                        <div id="atividadesRecentes" class="space-y-3">
+                            <!-- Activities will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Status das Propostas</h3>
+                        <canvas id="chartPropostas" style="height: 300px;"></canvas>
+                    </div>
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Propostas por Mês</h3>
+                        <canvas id="chartPropostasMes" style="height: 300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produtos Tab -->
+        <div id="produtos" class="tab-content hidden">
+            <div class="px-4 py-6 sm:px-0">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Gestão de Produtos</h2>
+                    <button id="novoProdutoBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-plus mr-2"></i>Novo Produto
+                    </button>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="bg-white shadow rounded-lg p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="text" id="searchProdutos" placeholder="Buscar produtos..." class="border border-gray-300 rounded-md px-3 py-2">
+                        <select id="filterCategoria" class="border border-gray-300 rounded-md px-3 py-2">
+                            <option value="">Todas as categorias</option>
+                        </select>
+                        <select id="filterStatusProduto" class="border border-gray-300 rounded-md px-3 py-2">
+                            <option value="">Todos os status</option>
+                            <option value="true">Ativo</option>
+                            <option value="false">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200" id="tabelaProdutos">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unidade</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="corpoTabelaProdutos">
+                                    <!-- Products will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fornecedores Tab -->
+        <div id="fornecedores" class="tab-content hidden">
+            <div class="px-4 py-6 sm:px-0">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Gestão de Fornecedores</h2>
+                    <button id="novoFornecedorBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-plus mr-2"></i>Novo Fornecedor
+                    </button>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="bg-white shadow rounded-lg p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="searchFornecedores" placeholder="Buscar fornecedores..." class="border border-gray-300 rounded-md px-3 py-2">
+                        <select id="filterStatusFornecedor" class="border border-gray-300 rounded-md px-3 py-2">
+                            <option value="">Todos os status</option>
+                            <option value="true">Ativo</option>
+                            <option value="false">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Suppliers Table -->
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200" id="tabelaFornecedores">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Razão Social</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome Fantasia</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CNPJ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contato</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="corpoTabelaFornecedores">
+                                    <!-- Suppliers will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Propostas Tab -->
+        <div id="propostas" class="tab-content hidden">
+            <div class="px-4 py-6 sm:px-0">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Gestão de Propostas</h2>
+                    <button id="novaPropostaBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-plus mr-2"></i>Nova Proposta
+                    </button>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="bg-white shadow rounded-lg p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <input type="text" id="searchPropostas" placeholder="Buscar propostas..." class="border border-gray-300 rounded-md px-3 py-2">
+                        <select id="filterStatusProposta" class="border border-gray-300 rounded-md px-3 py-2">
+                            <option value="">Todos os status</option>
+                            <option value="pendente">Pendente</option>
+                            <option value="aprovada">Aprovada</option>
+                            <option value="rejeitada">Rejeitada</option>
+                            <option value="expirada">Expirada</option>
+                            <option value="renovacao_solicitada">Renovação Solicitada</option>
+                        </select>
+                        <input type="date" id="filterDataInicio" class="border border-gray-300 rounded-md px-3 py-2">
+                        <input type="date" id="filterDataFim" class="border border-gray-300 rounded-md px-3 py-2">
+                    </div>
+                </div>
+
+                <!-- Proposals Table -->
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200" id="tabelaPropostas">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nº Proposta</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produto</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fornecedor</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor Total</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Validade</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="corpoTabelaPropostas">
+                                    <!-- Proposals will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cotações Pendentes Tab -->
+        <div id="cotacoes" class="tab-content hidden">
+            <div class="px-4 py-6 sm:px-0">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Cotações Pendentes de Renovação</h2>
+                
+                <!-- Alert Summary -->
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700">
+                                <strong>Atenção:</strong> Existem propostas que precisam de renovação ou estão próximas do vencimento.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Quotations -->
+                <div class="space-y-6">
+                    <!-- Vencendo em 2 meses -->
+                    <div class="bg-white shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-clock text-orange-500 mr-2"></i>Vencendo em até 2 meses
+                            </h3>
+                            <div id="cotacoesVencendo" class="space-y-3">
+                                <!-- Will be populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Já vencidas -->
+                    <div class="bg-white shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>Propostas Vencidas
+                            </h3>
+                            <div id="cotacoesVencidas" class="space-y-3">
+                                <!-- Will be populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Renovação solicitada -->
+                    <div class="bg-white shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">
+                                <i class="fas fa-sync-alt text-blue-500 mr-2"></i>Renovação Solicitada
+                            </h3>
+                            <div id="cotacoesRenovacao" class="space-y-3">
+                                <!-- Will be populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relatórios Tab -->
+        <div id="relatorios" class="tab-content hidden">
+            <div class="px-4 py-6 sm:px-0">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Relatórios e Analytics</h2>
+                
+                <!-- Report Filters -->
+                <div class="bg-white shadow rounded-lg p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Período</label>
+                            <select id="periodoRelatorio" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                                <option value="30">Últimos 30 dias</option>
+                                <option value="90">Últimos 90 dias</option>
+                                <option value="180">Últimos 6 meses</option>
+                                <option value="365">Último ano</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Data Início</label>
+                            <input type="date" id="dataInicioRelatorio" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Data Fim</label>
+                            <input type="date" id="dataFimRelatorio" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                        </div>
+                        <div class="flex items-end">
+                            <button id="gerarRelatorioBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Gerar Relatório
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Volume de Propostas por Mês</h3>
+                        <canvas id="chartVolumePropostas" style="height: 300px;"></canvas>
+                    </div>
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Valor Total por Status</h3>
+                        <canvas id="chartValorStatus" style="height: 300px;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top Suppliers -->
+                <div class="bg-white shadow rounded-lg p-6 mb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Top 10 Fornecedores</h3>
+                    <canvas id="chartTopFornecedores" style="height: 400px;"></canvas>
+                </div>
+
+                <!-- Export Options -->
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Exportar Dados</h3>
+                    <div class="flex space-x-4">
+                        <button id="exportarExcelBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            <i class="fas fa-file-excel mr-2"></i>Exportar Excel
+                        </button>
+                        <button id="exportarPdfBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            <i class="fas fa-file-pdf mr-2"></i>Exportar PDF
+                        </button>
+                        <button id="exportarCsvBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            <i class="fas fa-file-csv mr-2"></i>Exportar CSV
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals will be inserted here -->
+    <div id="modalsContainer"></div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/produtos.js"></script>
+    <script src="js/fornecedores.js"></script>
+    <script src="js/propostas.js"></script>
+    <script src="js/alertas.js"></script>
+    <script src="js/relatorios.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

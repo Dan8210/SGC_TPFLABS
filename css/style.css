@@ -1,0 +1,339 @@
+/* Custom CSS for SGP - Sistema de Gestão de Propostas */
+
+.font-inter {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Tab System */
+.tab-button.active {
+    color: #2563eb;
+    border-color: #2563eb;
+}
+
+.tab-content.hidden {
+    display: none;
+}
+
+/* Custom Components */
+.status-badge {
+    @apply px-2 inline-flex text-xs leading-5 font-semibold rounded-full;
+}
+
+.status-pendente {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.status-aprovada {
+    @apply bg-green-100 text-green-800;
+}
+
+.status-rejeitada {
+    @apply bg-red-100 text-red-800;
+}
+
+.status-expirada {
+    @apply bg-gray-100 text-gray-800;
+}
+
+.status-renovacao_solicitada {
+    @apply bg-blue-100 text-blue-800;
+}
+
+.status-ativo {
+    @apply bg-green-100 text-green-800;
+}
+
+.status-inativo {
+    @apply bg-red-100 text-red-800;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Form Styles */
+.form-group {
+    @apply mb-4;
+}
+
+.form-label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.form-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500;
+}
+
+.form-textarea {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 resize-vertical;
+}
+
+.form-select {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500;
+}
+
+/* Button Variants */
+.btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline;
+}
+
+.btn-secondary {
+    @apply bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline;
+}
+
+.btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline;
+}
+
+.btn-success {
+    @apply bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline;
+}
+
+.btn-warning {
+    @apply bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline;
+}
+
+/* Table Styles */
+.table-action-btn {
+    @apply text-sm font-medium mr-2 hover:underline;
+}
+
+.table-action-edit {
+    @apply text-blue-600 hover:text-blue-900;
+}
+
+.table-action-delete {
+    @apply text-red-600 hover:text-red-900;
+}
+
+.table-action-view {
+    @apply text-green-600 hover:text-green-900;
+}
+
+/* Alert Styles */
+.alert {
+    @apply p-4 rounded-md;
+}
+
+.alert-success {
+    @apply bg-green-50 border border-green-200 text-green-700;
+}
+
+.alert-error {
+    @apply bg-red-50 border border-red-200 text-red-700;
+}
+
+.alert-warning {
+    @apply bg-yellow-50 border border-yellow-200 text-yellow-700;
+}
+
+.alert-info {
+    @apply bg-blue-50 border border-blue-200 text-blue-700;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Notification Toast */
+.toast {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1050;
+    min-width: 300px;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    border-left: 4px solid;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+.toast-success {
+    border-left-color: #10b981;
+}
+
+.toast-error {
+    border-left-color: #ef4444;
+}
+
+.toast-warning {
+    border-left-color: #f59e0b;
+}
+
+.toast-info {
+    border-left-color: #3b82f6;
+}
+
+/* Card Hover Effects */
+.card-hover {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #3b82f6;
+    transition: width 0.3s ease-in-out;
+}
+
+/* Responsive Design Improvements */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 1rem;
+        max-width: calc(100vw - 2rem);
+    }
+    
+    .nav-tabs {
+        flex-direction: column;
+    }
+    
+    .tab-button {
+        width: 100%;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+        border-right: none !important;
+        padding: 0.75rem 1rem;
+    }
+    
+    .tab-button.active {
+        border-left: 3px solid #2563eb;
+        background-color: #eff6ff;
+    }
+}
+
+/* Dark Mode Support (Future Enhancement) */
+@media (prefers-color-scheme: dark) {
+    /* Dark mode styles can be added here if needed */
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f7fafc;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .tab-content.hidden {
+        display: block !important;
+    }
+    
+    body {
+        background: white !important;
+    }
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.3s ease-in-out;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Utility Classes */
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.select-none {
+    user-select: none;
+}
